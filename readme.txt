@@ -1,0 +1,1 @@
+A simple template to get going quickly in Node and React.
