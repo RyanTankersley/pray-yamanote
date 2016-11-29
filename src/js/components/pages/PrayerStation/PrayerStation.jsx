@@ -63,6 +63,7 @@ class PrayerStation extends ResourcedComponent{
   }
 
   renderStation() {
+    window.scrollTo(0, 0);
     const station = this.getCurrentStation();
     return (
       <div>
@@ -74,7 +75,7 @@ class PrayerStation extends ResourcedComponent{
           <div style={{'textAlign': 'left'}}>
             <StationInformation desc={station.desc} prayerPoints={station.prayerPoints} />
           </div>
-          <StationBrowser onMove={(isLeft) => this.changeStations(isLeft)}/>
+          <StationBrowser onMove={(isLeft) => this.changeStations(isLeft)} />
         </div>
       </div>
     );

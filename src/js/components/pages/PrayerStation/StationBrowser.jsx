@@ -6,6 +6,7 @@ import { browserHistory } from 'react-router';
 class StationBrowser extends React.Component{
   onStartOver() {
     browserHistory.push("/");
+    window.scrollTo(0, 0);
   }
 
   render() {
