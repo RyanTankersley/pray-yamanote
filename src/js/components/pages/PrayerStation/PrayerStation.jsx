@@ -71,10 +71,10 @@ class PrayerStation extends ResourcedComponent{
           <img className="img-responsive" style={{'margin': 'auto'}} src='/images/yamanote-small.png' />
           <h2 style={{'fontWeight': 'bold'}}>{station.name}</h2>
           <p>By: {station.author}</p>
-          <StationBrowser onMove={(isLeft) => this.changeStations(isLeft)} />
           <div style={{'textAlign': 'left'}}>
             <StationInformation desc={station.desc} prayerPoints={station.prayerPoints} />
           </div>
+          <StationBrowser onMove={(isLeft) => this.changeStations(isLeft)}/>
         </div>
       </div>
     );
