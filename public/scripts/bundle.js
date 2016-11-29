@@ -52693,12 +52693,36 @@ var PrayerStation = function (_ResourcedComponent) {
       }
     }
   }, {
+    key: 'getDistanceFromBeginning',
+    value: function getDistanceFromBeginning() {
+      var startIndex = this.getStationByName(this.props.params.station).index;
+      var distance = 0;
+
+      if (this.isGoingClockwise() === true) {
+        distance = startIndex - this.state.currentIndex + this.state.stations.length;
+      } else {
+        distance = this.state.currentIndex - startIndex;
+      }
+
+      if (distance < 0) distance += this.state.stations.length;
+
+      if (distance >= this.state.stations.length) distance -= this.state.stations.length;
+
+      //Accounts for index vs. position
+      distance = distance + 1;
+      return distance;
+    }
+  }, {
+    key: 'isGoingClockwise',
+    value: function isGoingClockwise() {
+      var clockwise = parseInt(this.props.params.isGoingClockwise);
+      return isNaN(clockwise) || clockwise > 0;
+    }
+  }, {
     key: 'changeStations',
     value: function changeStations(moveBack) {
       //When going opposite direction, need to flip left and right
-      var clockwise = parseInt(this.props.params.isGoingClockwise);
-      clockwise = isNaN(clockwise) || clockwise > 0;
-      if (clockwise === true) {
+      if (this.isGoingClockwise() === true) {
         moveBack = !moveBack;
       }
 
@@ -52715,6 +52739,8 @@ var PrayerStation = function (_ResourcedComponent) {
 
       window.scrollTo(0, 0);
       var station = this.getCurrentStation();
+      var clockwise = this.isGoingClockwise();
+      var icon = clockwise ? 'fa fa-rotate-right' : 'fa fa-rotate-left';
       return _react2.default.createElement(
         'div',
         null,
@@ -52722,10 +52748,10 @@ var PrayerStation = function (_ResourcedComponent) {
         _react2.default.createElement(
           'div',
           { style: { 'padding': '10px', 'textAlign': 'center' } },
-          _react2.default.createElement('img', { className: 'img-responsive', style: { 'margin': 'auto' }, src: '/images/yamanote-small.png' }),
+          _react2.default.createElement('img', { className: 'img-responsive', style: { 'margin': 'auto', 'maxHeight': '300px' }, src: '/images/yamanote-small.png' }),
           _react2.default.createElement(
             'h2',
-            { style: { 'fontWeight': 'bold' } },
+            { style: { 'fontWeight': 'bold', 'marginBottom': 0 } },
             station.name
           ),
           _react2.default.createElement(
@@ -52735,13 +52761,21 @@ var PrayerStation = function (_ResourcedComponent) {
             station.author
           ),
           _react2.default.createElement(
+            'p',
+            { style: { 'marginBottom': '5px' } },
+            this.getDistanceFromBeginning(),
+            ' of ',
+            this.state.stations.length
+          ),
+          _react2.default.createElement('i', { className: icon }),
+          _react2.default.createElement(
             'div',
             { style: { 'textAlign': 'left' } },
             _react2.default.createElement(_StationInformation2.default, { desc: station.desc, prayerPoints: station.prayerPoints })
           ),
           _react2.default.createElement(_StationBrowser2.default, { onMove: function onMove(isLeft) {
               return _this2.changeStations(isLeft);
-            }, style: { 'marginBottom': '30px' } })
+            } })
         )
       );
     }

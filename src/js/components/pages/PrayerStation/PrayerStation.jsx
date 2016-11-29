@@ -45,11 +45,35 @@ class PrayerStation extends ResourcedComponent{
     }
   }
 
+  getDistanceFromBeginning() {
+    const startIndex = this.getStationByName(this.props.params.station).index;
+    let distance = 0;
+
+    if(this.isGoingClockwise() === true) {
+      distance = (startIndex - this.state.currentIndex) + this.state.stations.length;
+    } else {
+      distance = this.state.currentIndex - startIndex;
+    }
+
+    if(distance < 0)
+      distance += this.state.stations.length;
+    
+    if(distance >= this.state.stations.length)
+      distance -= this.state.stations.length;
+    
+    //Accounts for index vs. position
+    distance = distance + 1;
+    return distance;
+  }
+
+  isGoingClockwise() {
+    let clockwise = parseInt(this.props.params.isGoingClockwise);
+    return isNaN(clockwise) || clockwise > 0;
+  }
+
   changeStations(moveBack) {
     //When going opposite direction, need to flip left and right
-    let clockwise = parseInt(this.props.params.isGoingClockwise);
-    clockwise = isNaN(clockwise) || clockwise > 0;
-    if(clockwise === true) {
+    if(this.isGoingClockwise() === true) {
       moveBack = !moveBack;
     }
 
@@ -65,13 +89,17 @@ class PrayerStation extends ResourcedComponent{
   renderStation() {
     window.scrollTo(0, 0);
     const station = this.getCurrentStation();
+    const clockwise = this.isGoingClockwise();
+    const icon = clockwise ? 'fa fa-rotate-right' : 'fa fa-rotate-left';
     return (
       <div>
         <PageHeader />
         <div style={{'padding': '10px','textAlign': 'center'}}>
-          <img className="img-responsive" style={{'margin': 'auto'}} src='/images/yamanote-small.png' />
-          <h2 style={{'fontWeight': 'bold'}}>{station.name}</h2>
+          <img className="img-responsive" style={{'margin': 'auto', 'maxHeight': '300px'}} src='/images/yamanote-small.png' />
+          <h2 style={{'fontWeight': 'bold', 'marginBottom': 0}}>{station.name}</h2>
           <p>By: {station.author}</p>
+          <p style={{'marginBottom': '5px'}}>{this.getDistanceFromBeginning()} of {this.state.stations.length}</p>
+          <i className={icon}></i>
           <div style={{'textAlign': 'left'}}>
             <StationInformation desc={station.desc} prayerPoints={station.prayerPoints} />
           </div>
