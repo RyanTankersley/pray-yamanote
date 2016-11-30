@@ -52580,7 +52580,7 @@ var Home = function (_ResourcedComponent) {
           _react2.default.createElement(
             'div',
             { style: { 'textAlign': 'center' } },
-            _react2.default.createElement('img', { className: 'img-responsive', style: { 'margin': 'auto' }, src: '/images/yamanote-small.png' })
+            _react2.default.createElement('img', { className: 'img-responsive', style: { 'margin': 'auto', 'maxHeight': '300px' }, src: '/images/yamanote-small.png' })
           ),
           _react2.default.createElement(
             'h3',

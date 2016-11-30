@@ -34,7 +34,7 @@ class Home extends ResourcedComponent{
         <PageHeader />
         <div style={{'padding': '10px'}}>
           <div style={{'textAlign': 'center'}}>
-            <img className="img-responsive" style={{'margin': 'auto'}} src='/images/yamanote-small.png' />
+            <img className="img-responsive" style={{'margin': 'auto', 'maxHeight': '300px'}} src='/images/yamanote-small.png' />
           </div>
           <h3 style={{'textAlign': 'center'}}>{this.state.strings.rotation}</h3>
           <RotationSelection onChangeDirection={(isGoingClockwise) => this.changeDirection(isGoingClockwise)}/>
