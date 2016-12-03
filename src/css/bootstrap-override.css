@@ -2,3 +2,11 @@
   margin-left: 0;
   margin-right: 0;
 }
+
+.navbar-inverse .navbar-brand {
+    color: white;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+    color: white;
+}

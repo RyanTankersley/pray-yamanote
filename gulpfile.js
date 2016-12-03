@@ -11,11 +11,13 @@ var mocha = require('gulp-mocha');
 var config = {
     paths: {
         public: './public',
-        js: ['./src/js/**/*.js',
-        './src/js/**/*.jsx',
+        js: [
+            './src/js/**/*.js',
+            './src/js/**/*.jsx',
              './lib/*.js'],
-        css: ['node_modules/font-awesome/css/font-awesome.min.css',
-        'node_modules/bootstrap/dist/css/bootstrap.min.css',
+        css: [
+            'node_modules/font-awesome/css/font-awesome.min.css',
+            'node_modules/bootstrap/dist/css/bootstrap.min.css',
               './src/css/**/*.css'],
         tests: './test/**/*.js',
         mainJs: './src/js/main.js'

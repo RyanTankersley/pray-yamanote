@@ -2,6 +2,7 @@
 window.$ = window.jQuery = require('jquery');
 
 const $ = require('jquery');
+const bs = require('bootstrap');
 const React = require('react');
 const ReactRouter = require('react-router');
 const Router = ReactRouter.Router;
