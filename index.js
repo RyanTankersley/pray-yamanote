@@ -4,8 +4,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const moment = require('moment');
 const config = require('./lib/config');
-const passport = require('passport')
-const FacebookStrategy = require('passport-facebook').Strategy;
+const passport = require('passport');
+require('./lib/js/objects/PassportConfig.js')(passport);
 require('./lib/js/database/Connection.js');
 const usersApiItem = require('./lib/js/database/Users.js');
 const usersApi = new usersApiItem();
@@ -58,6 +58,14 @@ router.delete('/user/:email/', function(req, res) {
       res.send(response);
   });
 });
+
+router.get('/facebookdidstuff',
+        passport.authenticate('facebook', {
+            successRedirect : '/',
+            failureRedirect : '/login'
+        }));
+
+router.get('/facebook', passport.authenticate('facebook', { scope: 'email' }));
 
 app.use(express.static('public'));
 

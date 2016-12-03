@@ -4,12 +4,20 @@ let account = null;
 class Account {
 
   static logIn(cb) {
-    account = {
-      isAdmin: true,
-      email: 'ry.tankersley@gmail.com',
-      fname: 'Ryan',
-      lname: 'Tankersley'
-    }
+    console.log('logging in');
+    $.get('/api/facebook')
+      .done((response) => {
+        console.log(response);
+      })
+      .fail((response) => {
+        console.log(response);
+      });
+    // account = {
+    //   isAdmin: true,
+    //   email: 'ry.tankersley@gmail.com',
+    //   fname: 'Ryan',
+    //   lname: 'Tankersley'
+    // }
   }
 
   static getAccount() {
