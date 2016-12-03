@@ -4,6 +4,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const moment = require('moment');
 const config = require('./lib/config');
+const passport = require('passport')
+const FacebookStrategy = require('passport-facebook').Strategy;
 
 const app = express();
 
@@ -22,6 +24,19 @@ router.get('/strings', function(req, res) {
     res.sendFile(file);
 });
 
+
+passport.use(new FacebookStrategy({
+    clientID: FACEBOOK_APP_ID,
+    clientSecret: FACEBOOK_APP_SECRET,
+    callbackURL: "http://www.example.com/auth/facebook/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    User.findOrCreate(..., function(err, user) {
+      if (err) { return done(err); }
+      done(null, user);
+    });
+  }
+));
 app.use(express.static('public'));
 
 app.use('/api', router);
