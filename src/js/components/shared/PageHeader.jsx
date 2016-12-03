@@ -26,7 +26,7 @@ class PageHeader extends React.Component{
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
             </button>
-            <a className="navbar-brand" href="#">Pray Yamanote</a>
+            <a className="navbar-brand" href="/">Pray Yamanote</a>
           </div>
           <div id="navbar" className="navbar-collapse collapse">
             <ul className="nav navbar-nav">
