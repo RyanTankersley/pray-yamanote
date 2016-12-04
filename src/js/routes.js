@@ -7,7 +7,6 @@ const routes = (
   <Router history={browserHistory}>
     <Route path="/" component={HomePage} />
     <Route path="/station/:station/:isGoingClockwise" component={PrayerStation} />
-    <Route path="/login" component={Login} />
   </Router>
 );
 

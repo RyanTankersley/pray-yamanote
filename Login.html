@@ -5,12 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     </head>
     <body>
-        <div id="app"></div>
-        <script src="/scripts/bundle.js"></script>
-        <script type="text/javascript">
-          if (window.location.hash && window.location.hash == '#_=_') {
-            window.location.hash = '';
-          }
+        <div className="btn-group-vertical" role="group">
+            <a className='btn btn-primary' href='/api/facebook'>Facebook</a>
+            <button className='btn btn-primary'>Google</button>
+          </div>
         </script>
     </body>
 </html>

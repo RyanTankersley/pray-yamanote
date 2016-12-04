@@ -8,10 +8,17 @@ class PageHeader extends React.Component{
   constructor() {
     super();
     this.state = {
-      isLoggedIn: accountApi.isLoggedIn()
+      isLoggedIn: false
     }
   }
 
+  componentDidMount() {
+    accountApi.isLoggedIn((response) => {
+      console.log(response);
+      this.state.isLoggedIn = response.response;
+      this.setState(this.state);
+    })
+  }
   render() {
     
     const logInText = this.state.isLoggedIn ? `${accountApi.getAccount().fname} ${accountApi.getAccount().lname}` : 'Log In';

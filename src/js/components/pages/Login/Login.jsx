@@ -5,6 +5,12 @@ import PageHeader from '../../shared/PageHeader.jsx';
 import AccountApi from '../../../api/Account.js';
 
 class Login extends React.Component{
+
+  logIn() {
+    AccountApi.logIn(() => {
+      console.log('hello'); 
+    })
+  }
   render() {
     const buttonStyle = {
       width: '100px'

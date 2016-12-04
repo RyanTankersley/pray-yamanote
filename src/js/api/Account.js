@@ -24,8 +24,14 @@ class Account {
     return account;
   }
   
-  static isLoggedIn() {
-    return account != null;
+  static isLoggedIn(cb) {
+    $.get('/api/isLoggedIn')
+      .done((response) => {
+        cb(response);
+      })
+      .fail((response) => {
+        console.log(response);
+      });
   }
 
   static isAdmin() {

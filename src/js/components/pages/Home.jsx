@@ -6,6 +6,7 @@ import PageHeader from '../shared/PageHeader.jsx';
 import StationList from '../shared/StationList.jsx';
 import RotationSelection from '../shared/RotationSelection.jsx';
 import ResourcedComponent from '../shared/ResourcedComponent.jsx';
+import AccountApi from '../../api/Account.js';
 import { browserHistory } from 'react-router'
 
 class Home extends ResourcedComponent{
@@ -19,6 +20,13 @@ class Home extends ResourcedComponent{
     this.setState(this.state);
   }
   
+  // componentDidMount() {
+  //   AccountApi.isLoggedIn((response) => {
+  //     console.log(response);
+  //   });
+  //   this.setState(this.state);
+  // }
+
   render() {
     const abnormal = this.getAbnormalRendering();
     if(abnormal !== null) {
