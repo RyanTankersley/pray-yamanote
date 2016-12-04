@@ -11,16 +11,12 @@ require('./lib/js/objects/PassportConfig.js')(passport);
 require('./lib/js/database/Connection.js');
 const usersApiItem = require('./lib/js/database/Users.js');
 const usersApi = new usersApiItem();
-var cookieParser = require('cookie-parser')
+
 const app = express();
 
-app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-app.use(session({ secret: config.passportSecret,
-    resave: true,
-    saveUninitialized: true })); // session secret
+app.use(session({ secret: config.passportSecret, resave: true, saveUninitialized: true })); // session secret
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -69,30 +65,26 @@ router.delete('/user/:email/', function(req, res) {
   });
 });
 
-router.get('/isLoggedIn', function(req, res) {
-  res.send({err: false, response: req.isAuthenticated()});
+router.get('/getLoggedInUser', function(req, res) {
+  res.send({err: false, response: req.session.passport.user});
 });
 
-router.get('/facebookdidstuff',
-        passport.authenticate('facebook', {
-            successRedirect : '/profile',
-            failureRedirect : '/'
-        }));
+router.get('/facebook/return', 
+  passport.authenticate('facebook', { failureRedirect: '/login' }),
+  function(req, res) {
+    res.redirect('/');
+  });
 
-router.get('/facebook', passport.authenticate('facebook', { scope: 'email' }));
+router.get('/facebook', passport.authenticate('facebook'));
 
 app.use(express.static('public'));
 
 app.use('/api', router);
 
-app.get('/login', (req, res) => {
-  const file = __dirname + '/login.html';
+app.get('/*', (req, res) => {
+  const file = __dirname + '/index.html';
   res.sendFile(file);
-})
-app.get('/profile', isLoggedIn, function(req, res) {
-  const file = __dirname + '/login.html';
-  res.sendFile(file);
-	});
+});
 
 app.listen(config.port);
 console.log('Listening at port: ' + config.port);

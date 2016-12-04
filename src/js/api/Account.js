@@ -20,18 +20,22 @@ class Account {
     // }
   }
 
-  static getAccount() {
-    return account;
-  }
-  
-  static isLoggedIn(cb) {
-    $.get('/api/isLoggedIn')
+  static getAccount(cb) {
+
+    if(account != null) return cb(account);
+    $.get('/api/getLoggedInUser')
       .done((response) => {
+        account = response;
+        console.log(response);
         cb(response);
       })
       .fail((response) => {
         console.log(response);
       });
+  }
+  
+  static isLoggedIn(cb) {
+    
   }
 
   static isAdmin() {

@@ -8,21 +8,22 @@ class PageHeader extends React.Component{
   constructor() {
     super();
     this.state = {
-      isLoggedIn: false
+      account: null
     }
   }
 
   componentDidMount() {
-    accountApi.isLoggedIn((response) => {
+    accountApi.getAccount((response) => {
+      console.log('didmount');
       console.log(response);
-      this.state.isLoggedIn = response.response;
+      this.state.account = response.response;
       this.setState(this.state);
     })
   }
   render() {
     
-    const logInText = this.state.isLoggedIn ? `${accountApi.getAccount().fname} ${accountApi.getAccount().lname}` : 'Log In';
-    const logInHref = this.state.isLoggedIn ? '/account' : '/login';
+    const logInText = this.state.account != null ? `${this.state.account.fname} ${this.state.account.lname}` : 'Log In';
+    const logInHref = this.state.account != null ? '/account' : '/login';
 
     return (
       <nav className="navbar navbar-inverse">
