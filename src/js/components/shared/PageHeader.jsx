@@ -14,9 +14,7 @@ class PageHeader extends React.Component{
 
   componentDidMount() {
     accountApi.getAccount((response) => {
-      console.log('didmount');
-      console.log(response);
-      this.state.account = response.response;
+      this.state.account = response;
       this.setState(this.state);
     })
   }

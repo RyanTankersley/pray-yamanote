@@ -1,45 +1,26 @@
 const $ = require('jquery');
 
-let account = null;
 class Account {
-
-  static logIn(cb) {
-    console.log('logging in');
-    $.get('/api/facebook')
-      .done((response) => {
-        console.log(response);
-      })
-      .fail((response) => {
-        console.log(response);
-      });
-    // account = {
-    //   isAdmin: true,
-    //   email: 'ry.tankersley@gmail.com',
-    //   fname: 'Ryan',
-    //   lname: 'Tankersley'
-    // }
-  }
-
   static getAccount(cb) {
-
-    if(account != null) return cb(account);
+    if(window.account != null) return cb(window.account);
     $.get('/api/getLoggedInUser')
       .done((response) => {
-        account = response;
-        console.log(response);
-        cb(response);
+        window.account = response.response;
+        if(window.account === undefined)
+          window.account = null;
+        cb(window.account);
       })
       .fail((response) => {
         console.log(response);
       });
   }
   
-  static isLoggedIn(cb) {
-    
+  static isLoggedIn() {
+    return window.account !== null;
   }
 
   static isAdmin() {
-    return account === null ? false : account.isAdmin;
+    return window.account === null ? false : window.account.isAdmin;
   };
 };
 
