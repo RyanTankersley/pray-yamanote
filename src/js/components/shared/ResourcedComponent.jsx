@@ -15,6 +15,7 @@ class ResourcedComponent extends React.Component{
     this.state = {
       stations: [],
       strings: null,
+      account: null,
       error: null
     };
   }

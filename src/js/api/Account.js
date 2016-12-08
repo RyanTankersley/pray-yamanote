@@ -1,14 +1,16 @@
 const $ = require('jquery');
 
 class Account {
-  static getAccount(cb) {
-    if(window.account != null) return cb(window.account);
+  static getLoggedIn(cb) {
+    const account = this.getAccount();
+    if(account !== null) {
+      return cb(account);
+    }
+    
     $.get('/api/getLoggedInUser')
       .done((response) => {
-        window.account = response.response;
-        if(window.account === undefined)
-          window.account = null;
-        cb(window.account);
+        localStorage.setItem('account', JSON.stringify(response.response));
+        cb(response.response);
       })
       .fail((response) => {
         console.log(response);
@@ -16,11 +18,32 @@ class Account {
   }
   
   static isLoggedIn() {
-    return window.account !== null;
+    const account = localStorage.getItem('account');
+    return account !== null && account !== undefined && account !== 'undefined';
   }
 
+  static logOut(cb) {
+    $.get('/api/logOut')
+      .done((response) => {
+        localStorage.setItem('account', null);
+        cb();
+      })
+      .fail((response) => {
+        console.log(response);
+      });
+  }
+
+  static getAccount() {
+    if(this.isLoggedIn()) {
+      const account = JSON.parse(localStorage.getItem('account'));
+      return account;
+    }
+    
+    return null;
+  }
   static isAdmin() {
-    return window.account === null ? false : window.account.isAdmin;
+    const account = localStorage.getItem('account');
+    return account === null ? false : account.isAdmin;
   };
 };
 

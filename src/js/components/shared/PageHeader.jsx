@@ -13,15 +13,31 @@ class PageHeader extends React.Component{
   }
 
   componentDidMount() {
-    accountApi.getAccount((response) => {
+    accountApi.getLoggedIn((response) => {
       this.state.account = response;
       this.setState(this.state);
     })
   }
+
+  logOut() {
+    accountApi.logOut(() => {
+      window.location.href = '/login';
+    });
+  }
+
   render() {
     
     const logInText = this.state.account != null ? `${this.state.account.fname} ${this.state.account.lname}` : 'Log In';
     const logInHref = this.state.account != null ? '/account' : '/login';
+
+    let links = [(
+                <li key='login'><Link to={logInHref}>{logInText}</Link></li>
+                )];
+
+    if(this.state.account != null)
+      links.push((
+        <li key='logout'><a onClick={(e) => this.logOut()}>Log Out</a></li>
+      ));
 
     return (
       <nav className="navbar navbar-inverse">
@@ -39,9 +55,9 @@ class PageHeader extends React.Component{
               <li><a href="/">Home</a></li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
-              <li>
-                <Link to={logInHref}>{logInText}</Link>
-              </li>
+            {links.map((item) => {
+              return item;
+            })}
             </ul>
           </div>
       </nav>
