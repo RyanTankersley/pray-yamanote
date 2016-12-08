@@ -7,6 +7,7 @@ var babelify = require('babelify');
 var source = require('vinyl-source-stream');
 var concat = require('gulp-concat');
 var mocha = require('gulp-mocha');
+var spawn = require('child_process').spawn;
 
 var config = {
     paths: {
@@ -51,6 +52,10 @@ gulp.task('test', function() {
     .pipe(mocha({reporter: 'nyan'}));
 });
 
+gulp.task('startSimple', function (cb) {
+  spawn('node', ['index.js'], { stdio: 'inherit' });
+});
+
 gulp.task('start', function () {
         nodemon({
           script: 'index.js'
@@ -60,3 +65,5 @@ gulp.task('start', function () {
 });
 
 gulp.task('default', ['build', 'test', 'watch', 'start']);
+
+gulp.task('simple', ['build', 'test', 'watch', 'startSimple']);
