@@ -23,59 +23,9 @@ app.use(passport.session());
 app.use(cors());
 const router = express.Router();
 
-router.get('/stations', function(req, res) {
-  const file = __dirname + '/lib/data/english/stations.json';
-  res.sendFile(file);
-});
-
-router.get('/strings', function(req, res) {
-  const file = __dirname + '/lib/data/english/strings.json';
-  res.sendFile(file);
-});
-
-router.post('/user/:email/:fname/:lname', function(req, res) {
-  let email = req.params.email;
-  let fname = req.params.fname;
-  let lname = req.params.lname;
-  usersApi.Create(email, fname, lname, (response) => {
-      res.send(response);
-  });
-});
-
-router.put('/user/:email/:fname/:lname', function(req, res) {
-  let email = req.params.email;
-  let fname = req.params.fname;
-  let lname = req.params.lname;
-  usersApi.Update(email, fname, lname, (response) => {
-      res.send(response);
-  });
-});
-
-router.get('/user/:email/', function(req, res) {
-  let email = req.params.email;
-  usersApi.Get(email, (response) => {
-      res.send(response);
-  });
-});
-
-router.delete('/user/:email/', function(req, res) {
-  let email = req.params.email;
-  usersApi.Delete(email, (response) => {
-      res.send(response);
-  });
-});
-
-router.get('/getLoggedInUser', function(req, res) {
-  res.send({err: false, response: req.session.passport.user});
-});
-
-router.get('/facebook/return', 
-  passport.authenticate('facebook', { failureRedirect: '/login' }),
-  function(req, res) {
-    res.redirect('/');
-  });
-
-router.get('/facebook', passport.authenticate('facebook'));
+require('./lib/js/routes/staticFileRoutes.js')(router);
+require('./lib/js/routes/userRoutes.js')(router);
+require('./lib/js/routes/authRoutes.js')(router);
 
 app.use(express.static('public'));
 
@@ -88,14 +38,3 @@ app.get('/*', (req, res) => {
 
 app.listen(config.port);
 console.log('Listening at port: ' + config.port);
-
-// route middleware to make sure a user is logged in
-function isLoggedIn(req, res, next) {
-
-    // if user is authenticated in the session, carry on 
-    if (req.isAuthenticated())
-        return next();
-
-    // if they aren't redirect them to the home page
-    res.redirect('/login');
-}
