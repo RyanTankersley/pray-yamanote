@@ -23,9 +23,16 @@ app.use(passport.session());
 app.use(cors());
 const router = express.Router();
 
-require('./lib/js/routes/staticFileRoutes.js')(router);
-require('./lib/js/routes/userRoutes.js')(router);
-require('./lib/js/routes/authRoutes.js')(router);
+const routeLocations = [
+'./lib/js/routes/staticFileRoutes.js',
+'./lib/js/routes/userRoutes.js',
+'./lib/js/routes/authRoutes.js',
+'./lib/js/routes/prayerWalkRoutes.js'
+];
+
+routeLocations.map((location) => {
+  require(location)(router);
+});
 
 app.use(express.static('public'));
 
