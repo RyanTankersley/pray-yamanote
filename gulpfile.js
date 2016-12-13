@@ -15,7 +15,7 @@ var config = {
         js: [
             './src/js/**/*.js',
             './src/js/**/*.jsx',
-             './lib/*.js'],
+             './lib/**/*.js'],
         css: [
             'node_modules/font-awesome/css/font-awesome.min.css',
             'node_modules/bootstrap/dist/css/bootstrap.min.css',
