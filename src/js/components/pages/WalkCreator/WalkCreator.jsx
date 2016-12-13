@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import mongoose from 'mongoose';
 
 import PageHeader from '../../shared/PageHeader.jsx';
 import AuthRequiredComponent from '../../shared/AuthRequiredComponent.jsx';
@@ -8,7 +9,8 @@ import AccountApi from '../../../api/Account.js';
 import StationApi from '../../../api/Station.js';
 import StationCreator from './StationCreator.jsx';
 import { browserHistory } from 'react-router';
-import { walkSchema } from '../../../../../lib/js/database/PrayerWalk.js';
+import walkSchema from '../../../../../lib/js/database/PrayerWalkSchema.js';
+
 
 class WalkCreator extends AuthRequiredComponent{
   constructor() {
@@ -44,11 +46,15 @@ class WalkCreator extends AuthRequiredComponent{
 
   onFinish() {
     var account = AccountApi.getAccount();
-    if(this.state.name !== "" && this.state.image !== "" && this.state.imageError !== true) {
+    if(this.state.name !== "" && this.state.image !== "" && this.state.imageError !== true && this.validate(this.state.name, account.email, this.state.image)) {
       console.log(account);
       StationApi.createWalk(this.state.name, account.email, this.state.image);
       browserHistory.push("/account");
     }
+  }
+
+  validate(name, owner, image) {
+    let doc = new mongoose.Document({name: name, owner: owner, image: image});
   }
 
   testImage(text) {
