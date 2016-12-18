@@ -21,6 +21,7 @@ class WalkCreator extends AuthRequiredComponent{
     this.state.imageError = false;
     this.state.nameHasHadValue = false;
     this.state.imageHasHadValue = false;
+    this.state.saveError = null;
   }
 
   render() {
@@ -52,16 +53,23 @@ class WalkCreator extends AuthRequiredComponent{
   onFinish() {
     this.state.nameHasHadValue = true;
     this.state.imageHasHadValue = true;
+
     if(this.isValid()) {
       const account = AccountApi.getAccount();
-      StationApi.createWalk(this.state.name, account.email, this.state.image);
-      browserHistory.push("/account");
+      StationApi.createWalk(this.state.name, account.email, this.state.image, (response) => {
+        if(response.err) {
+          this.state.saveError = response.response;
+          this.setState(this.state);
+        } else {
+          browserHistory.push("/account");
+        }
+      });
     }
     
     this.setState(this.state);
   }
 
-  getMongoDocFromState(thismethisowner, image) {
+  getMongoDocFromState() {
     var account = AccountApi.getAccount();
     return this.getMongoDoc(this.state.name, account.email, this.state.image);
   }
@@ -80,25 +88,6 @@ class WalkCreator extends AuthRequiredComponent{
     });;
 
     image.src = text;
-  }
-
-  getFormInput(labelName, hasError, placeholder, value, onChange, errorText) {
-    const formGroupClass = 'form-group' + (hasError ? ' has-error' : '');
-    const inputStyle = {
-      maxWidth: '500px'
-    };
-
-    let error = null;
-    if(hasError) {
-      error = (<p className='text-danger'>{errorText}</p>)
-    }
-    return (
-      <div className={formGroupClass}>
-        <label>{labelName}</label>
-        <input style={inputStyle} type="text" className="form-control" id={labelName} placeholder={placeholder} value={value} onChange={(e) => onChange(e.target.value, this)} />
-        {error}
-      </div>
-    );
   }
 
   nameHasError() {
@@ -125,7 +114,7 @@ class WalkCreator extends AuthRequiredComponent{
 
     if(!this.state.imageError && this.state.image !== "") {
       this.testImage(this.state.image);
-      image = (<img src={this.state.image} style={{'maxWidth': '500px', 'width': '100%'}}/>);
+      image = (<img src={this.state.image} style={{'maxWidth': '500px', 'width': '100%', 'marginBottom': '10px'}}/>);
     }
 
     return image;
@@ -147,6 +136,10 @@ class WalkCreator extends AuthRequiredComponent{
   }
 
   renderMain() {
+    let saveError = null;
+    if(this.state.saveError !== null) {
+      saveError = (<p className='text-danger'>{this.state.saveError}</p>);
+    }
     return (
       <div>
         <PageHeader />
@@ -163,6 +156,7 @@ class WalkCreator extends AuthRequiredComponent{
             <button type="button" className="btn btn-danger" style={{'float': 'left', 'marginRight': '5px'}} onClick={(e) => this.onCancel()}>Cancel</button>
             {this.getFinishButton(this.isValid())}
           </div>
+          {saveError}
         </div>
       </div>
     );
