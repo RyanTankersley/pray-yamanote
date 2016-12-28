@@ -7,36 +7,28 @@ import PageHeader from '../../shared/PageHeader.jsx';
 import ValidationInput from '../../shared/ValidationInput.jsx';
 import AuthRequired from '../../shared/AuthRequired.js';
 import AccountApi from '../../../api/Account.js';
-import StationApi from '../../../api/Station.js';
+import WalkApi from '../../../api/Walk.js';
 import StationCreator from './StationCreator.jsx';
 import { browserHistory } from 'react-router';
 import walkSchema from '../../../../../lib/js/database/PrayerWalkSchema.js';
 
 
-class WalkCreator extends React.Component{
+class WalkManager extends React.Component{
   constructor() {
     super();
-    this.authRequired = new AuthRequired();
-    this.state = {
-      name: "",
-      image: "",
-      imageError: false,
-      nameHasHadValue: false,
-      imageHasHadValue: false,
-      saveError: null
-    }
   }
 
-  componentWillMount() {
-    this.authRequired.handleComponentWillMount();
+  componentDidMount() {
+    WalkApi.getWalk('')
   }
 
   render() {
-    if(!this.authRequired.isAuthorized()) {
-      return this.authRequired.getNotLoggedInRendering();
+    const abnormal = this.getAbnormalAuthRendering();
+    if(abnormal !== null) {
+      return abnormal;
+    } else {
+      return this.renderMain();
     }
-    
-    return this.renderMain();
   }
 
   onNameChange(text) {
@@ -169,4 +161,4 @@ class WalkCreator extends React.Component{
   }
 };
 
-module.exports = WalkCreator;
+module.exports = WalkManager;
