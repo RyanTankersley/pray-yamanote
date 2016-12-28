@@ -9,6 +9,10 @@ class ResourceLoader {
     this.error = null;
   }
 
+  getWalks(user, cb) {
+    Station.getWalksForUser(user, cb);
+  }
+
   getStations(cb) {
     Station.getStations((response) => {
       if(response.err) {

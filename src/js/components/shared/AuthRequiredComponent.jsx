@@ -2,7 +2,6 @@
 
 import React from 'react';
 
-import PageHeader from '../shared/PageHeader.jsx';
 import ResourcedComponent from '../shared/ResourcedComponent.jsx';
 import AccountApi from '../../api/Account.js';
 

@@ -1,10 +1,10 @@
 import React from 'react'
 import { Router, Route, browserHistory, DefaultRoute, NotFoundRoute, Redirect } from 'react-router'
-const HomePage = require('./components/pages/Home.jsx')
-const PrayerStation = require('./components/pages/PrayerStation/PrayerStation.jsx')
-const Login = require('./components/pages/Login/Login.jsx')
-const Account = require('./components/pages/Account/Account.jsx')
-const WalkCreator = require('./components/pages/WalkCreator/WalkCreator.jsx')
+const HomePage = require('./components/pages/Home.jsx');
+const PrayerStation = require('./components/pages/PrayerStation/PrayerStation.jsx');
+const Login = require('./components/pages/Login/Login.jsx');
+const Account = require('./components/pages/Account/Account.jsx');
+const WalkCreator = require('./components/pages/WalkCreator/WalkCreator.jsx');
 
 const routes = (
   <Router history={browserHistory}>
