@@ -13,7 +13,7 @@ import WalkApi from '../../../api/Walk.js';
 class Walk extends React.Component {
   render() {
     return (
-      <Link to='creator' className='btn btn-primary' style={{'width': '75%'}}>{this.props.name}</Link>
+      <Link to={'manager/' + this.props.name} className='btn btn-primary' style={{'width': '75%'}}>{this.props.name}</Link>
     )
   }
 }
@@ -23,15 +23,16 @@ class Walks extends React.Component {
     super(props);
 
     this.errorable = new Errorable();
-    this.errorable.setError(props.error);
 
     this.loadable = new Loadable();
-    this.loadable.setLoading(this.props.walks === null);
+    console.log(props);
   }
 
   render() {
-    let content = null;
+    this.loadable.setLoading(this.props.walks === null);
+    this.errorable.setError(this.props.error);
 
+    let content = null;
     if(this.errorable.hasError()) {
       content = this.errorable.renderError();
     } else if(this.loadable.isLoading()) {

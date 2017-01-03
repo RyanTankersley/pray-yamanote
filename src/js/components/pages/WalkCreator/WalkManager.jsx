@@ -3,32 +3,77 @@
 import React from 'react';
 import mongoose from 'mongoose';
 
+import { Link } from 'react-router';
 import PageHeader from '../../shared/PageHeader.jsx';
 import ValidationInput from '../../shared/ValidationInput.jsx';
-import AuthRequired from '../../shared/AuthRequired.js';
 import AccountApi from '../../../api/Account.js';
 import WalkApi from '../../../api/Walk.js';
 import StationCreator from './StationCreator.jsx';
 import { browserHistory } from 'react-router';
 import walkSchema from '../../../../../lib/js/database/PrayerWalkSchema.js';
+import AuthRequired from '../../shared/AuthRequired.js';
+import Errorable from '../../shared/Errorable.js';
+import Loadable from '../../shared/Loadable.js';
 
 
 class WalkManager extends React.Component{
   constructor() {
     super();
+    this.authRequired = new AuthRequired();
+    this.errorable = new Errorable();
+    this.loadable = new Loadable();
+    this.loadable.startLoading();
+
+    this.state = {
+      walk: null
+    }
+  }
+
+  componentWillMount() {
+    this.authRequired.handleComponentWillMount();
   }
 
   componentDidMount() {
-    WalkApi.getWalk('')
+    WalkApi.getWalk(this.props.params.name, (response) => {
+      if(response.err) {
+        this.errorable.setError(response.response);
+        this.state.walk = null;
+      } else {
+        this.state.walk = response.response;
+        this.errorable.clearError();
+        this.loadable.stopLoading();
+      }
+
+      this.setState(this.state);
+    });
   }
 
   render() {
-    const abnormal = this.getAbnormalAuthRendering();
-    if(abnormal !== null) {
-      return abnormal;
+    let content = null;
+    
+    if(!this.authRequired.isAuthorized()) {
+      content = this.authRequired.getNotLoggedInRendering();
+    } else if(this.errorable.hasError()) {
+      content = this.errorable.renderError();
+    } else if(this.loadable.isLoading()) {
+      content = this.loadable.renderLoading();
     } else {
-      return this.renderMain();
+      content = (
+        <div style={{'padding': '10px', 'paddingTop': '0'}}>
+          <h3>Manage {this.state.walk.name}</h3>
+          <img src={this.state.walk.image} style={{'maxWidth': '500px', 'width': '100%', 'marginBottom': '10px'}} />
+          <h3>Stations</h3>
+          <Link to={`${this.props.params.name}/station/create`} className='btn btn-primary'>Add Station</Link>
+        </div>
+      );
     }
+
+    return (
+      <div>
+        <PageHeader />
+        {content}
+      </div>
+    );
   }
 
   onNameChange(text) {
@@ -80,7 +125,6 @@ class WalkManager extends React.Component{
   testImage(text) {
     const image = new Image();
     image.addEventListener("error", (e) => {
-      console.log('rawr');
       this.state.imageError = true;
       this.setState(this.state);
     });;
@@ -138,6 +182,7 @@ class WalkManager extends React.Component{
     if(this.state.saveError !== null) {
       saveError = (<p className='text-danger'>{this.state.saveError}</p>);
     }
+
     return (
       <div>
         <PageHeader />

@@ -26,7 +26,7 @@ class AuthRequired {
 
   handleComponentWillMount() {
     if(!this.isAuthorized())
-      handleNotLoggedIn();
+      this.handleNotLoggedIn();
   }
 }
 

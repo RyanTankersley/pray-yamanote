@@ -2,14 +2,13 @@ const $ = require('jquery');
 
 class Account {
   static getLoggedIn(cb) {
-    const account = this.getAccount();
-    if(account !== null) {
-      return cb(account);
-    }
-    
     $.get('/api/getLoggedInUser')
       .done((response) => {
-        localStorage.setItem('account', JSON.stringify(response.response));
+        if(response.response.isLoggedIn)
+          localStorage.setItem('account', JSON.stringify(response.response.user));
+        else
+          localStorage.setItem('account', null);
+
         cb(response.response);
       })
       .fail((response) => {
@@ -19,7 +18,8 @@ class Account {
   
   static isLoggedIn() {
     const account = localStorage.getItem('account');
-    return account !== null && account !== undefined && account !== 'undefined';
+    const isLoggedIn = account !== null && account !== 'null' && account !== undefined && account !== 'undefined';
+    return isLoggedIn;
   }
 
   static logOut(cb) {
@@ -36,6 +36,13 @@ class Account {
   static getAccount() {
     if(this.isLoggedIn()) {
       const account = JSON.parse(localStorage.getItem('account'));
+
+      //If there is a value, ensure the user is still logged in online. If not, log them out 
+      this.getLoggedIn((response) => {
+        if(!response.isLoggedIn)
+          localStorage.setItem('account', null);
+      });
+
       return account;
     }
     

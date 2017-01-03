@@ -14,8 +14,10 @@ class PageHeader extends React.Component{
 
   componentDidMount() {
     accountApi.getLoggedIn((response) => {
-      this.state.account = response;
-      this.setState(this.state);
+      if(response.isLoggedIn) {
+        this.state.account = response.user;
+        this.setState(this.state);
+      }
     })
   }
 

@@ -6,6 +6,7 @@ const Login = require('./components/pages/Login/Login.jsx');
 const Account = require('./components/pages/Account/Account.jsx');
 const WalkCreator = require('./components/pages/WalkCreator/WalkCreator.jsx');
 const WalkManager = require('./components/pages/WalkCreator/WalkManager.jsx');
+const StationCreator = require('./components/pages/WalkCreator/StationCreator.jsx');
 
 const routes = (
   <Router history={browserHistory}>
@@ -15,6 +16,7 @@ const routes = (
     <Route path="/account" component={Account} />
     <Route path="/creator" component={WalkCreator} />
     <Route path="/manager/:name" component={WalkManager} />
+    <Route path="/manager/:name/station/create" component={StationCreator} />
   </Router>
 );
 
