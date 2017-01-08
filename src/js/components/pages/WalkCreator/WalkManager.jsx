@@ -2,6 +2,7 @@
 
 import React from 'react';
 import mongoose from 'mongoose';
+import _ from 'lodash';
 
 import { Link } from 'react-router';
 import PageHeader from '../../shared/PageHeader.jsx';
@@ -34,12 +35,24 @@ class WalkManager extends React.Component{
   }
 
   componentDidMount() {
-    WalkApi.getWalk(this.props.params.name, (response) => {
+    WalkApi.getWalksForUser(this.authRequired.account.email, (response) => {
       if(response.err) {
         this.errorable.setError(response.response);
         this.state.walk = null;
       } else {
-        this.state.walk = response.response;
+        let walk = _.find(response.response, (item) => {
+          return item.name === this.props.params.name;
+        });
+
+        walk = null;
+        if(walk === null) {
+          this.authRequired.isAuthenticated = false;
+          this.state.walk = null;
+        } else {
+          this.authRequired.isAuthenticated = true;
+          this.state.walk = walk;
+        }
+
         this.errorable.clearError();
         this.loadable.stopLoading();
       }
@@ -51,12 +64,17 @@ class WalkManager extends React.Component{
   render() {
     let content = null;
     
-    if(!this.authRequired.isAuthorized()) {
+    console.log('this.authRequired.isAuthenticated');
+    console.log(this.authRequired.isAuthenticated);
+    console.log('this.authRequired.isAuthenticated');
+    if(!this.authRequired.isAuthorized) {
       content = this.authRequired.getNotLoggedInRendering();
     } else if(this.errorable.hasError()) {
       content = this.errorable.renderError();
-    } else if(this.loadable.isLoading()) {
+    } else if(this.loadable.isLoading() || this.authRequired.isAuthenticated === null) {
       content = this.loadable.renderLoading();
+    } else if(this.authRequired.isAuthenticated === false) {
+      this.authRequired.handleNotLoggedIn();
     } else {
       content = (
         <div style={{'padding': '10px', 'paddingTop': '0'}}>

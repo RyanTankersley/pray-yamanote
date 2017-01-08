@@ -32,7 +32,7 @@ class WalkCreator extends React.Component{
   }
 
   render() {
-    if(!this.authRequired.isAuthorized()) {
+    if(!this.authRequired.isAuthorized) {
       return this.authRequired.getNotLoggedInRendering();
     }
     

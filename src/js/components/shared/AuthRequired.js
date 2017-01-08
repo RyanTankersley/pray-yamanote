@@ -6,10 +6,8 @@ import AccountApi from '../../api/Account.js';
 class AuthRequired {
   constructor() {
     this.account = AccountApi.getAccount();
-  }
-
-  isAuthorized() {
-    return AccountApi.isLoggedIn();
+    this.isAuthorized = AccountApi.isLoggedIn();
+    this.isAuthenticated = null;
   }
 
   handleNotLoggedIn() {
@@ -25,7 +23,7 @@ class AuthRequired {
   }
 
   handleComponentWillMount() {
-    if(!this.isAuthorized())
+    if(!this.isAuthorized)
       this.handleNotLoggedIn();
   }
 }

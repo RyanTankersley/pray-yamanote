@@ -82,7 +82,7 @@ class Account extends React.Component{
 
   render() {
     let content = null;
-    if(!this.authRequired.isAuthorized()) {
+    if(!this.authRequired.isAuthorized) {
       content = this.authRequired.getNotLoggedInRendering();
     }
     else if(this.errorable.hasError()) {
